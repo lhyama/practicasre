@@ -1,26 +1,24 @@
 provider "aws" {
-  region = "us-east-1" # AWS región
+  region = "us-east-1"
 }
 
-resource "aws_vpc" "practica" {
-  cidr_block = "10.0.0.0/16" # CIDR
-
-  tags = {
-    Name = "practicaVPC"
-  }
+resource "aws_vpc" "my_vpc" {
+  cidr_block = "10.0.0.0/16"
 }
 
-resource "aws_subnet" "practica" {
-  cidr_block = "10.0.1.0/24" # CIDR
-  vpc_id     = aws_vpc.practica.id
-
-  tags = {
-    Name = "practicaSubnet"
-  }
+resource "aws_subnet" "my_subnet_1" {
+  vpc_id     = aws_vpc.my_vpc.id
+  cidr_block = "10.0.1.0/24"
 }
 
-resource "aws_security_group" "practica" {
-  name_prefix = "practicaSG-"
+resource "aws_subnet" "my_subnet_2" {
+  vpc_id     = aws_vpc.my_vpc.id
+  cidr_block = "10.0.2.0/24"
+}
+
+resource "aws_security_group" "my_security_group" {
+  name_prefix = "my_security_group"
+  vpc_id      = aws_vpc.my_vpc.id
 
   ingress {
     from_port   = 0
@@ -37,15 +35,16 @@ resource "aws_security_group" "practica" {
   }
 }
 
-resource "aws_instance" "practica" {
-  ami           = "ami-007855ac798b5175e" # AMI
-  instance_type = "t2.micro" # tipo de instancia
-  count         = 2 # Crear dos instancias
+resource "aws_instance" "my_instance_1" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.my_subnet_1.id
+  vpc_security_group_ids = [aws_security_group.my_security_group.id]
+}
 
-  subnet_id              = aws_subnet.practica.id
-  vpc_security_group_ids = [aws_security_group.practica.id]
-
-  tags = {
-    Name = "practicaInstance-${count.index+1}"
-  }
+resource "aws_instance" "my_instance_2" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.my_subnet_2.id
+  vpc_security_group_ids = [aws_security_group.my_security_group.id]
 }
