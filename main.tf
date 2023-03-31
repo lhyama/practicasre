@@ -1,5 +1,5 @@
 provider "aws" {
-  #Norte de Virginia
+  #Norte Virginia
   region = "us-east-1"
 }
 
