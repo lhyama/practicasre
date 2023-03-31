@@ -1,9 +1,9 @@
 provider "aws" {
-  region = "us-east-1" # Cambiar a la región de tu preferencia
+  region = "us-east-1" # AWS región
 }
 
 resource "aws_vpc" "practica" {
-  cidr_block = "10.0.0.0/16" # Cambiar a la CIDR de tu preferencia
+  cidr_block = "10.0.0.0/16" # CIDR
 
   tags = {
     Name = "practicaVPC"
@@ -11,7 +11,7 @@ resource "aws_vpc" "practica" {
 }
 
 resource "aws_subnet" "practica" {
-  cidr_block = "10.0.1.0/24" # Cambiar a la CIDR de tu preferencia
+  cidr_block = "10.0.1.0/24" # CIDR
   vpc_id     = aws_vpc.practica.id
 
   tags = {
@@ -38,8 +38,8 @@ resource "aws_security_group" "practica" {
 }
 
 resource "aws_instance" "practica" {
-  ami           = "ami-0c55b159cbfafe1f0" # Cambiar a la AMI de tu preferencia
-  instance_type = "t2.micro" # Cambiar al tipo de instancia de tu preferencia
+  ami           = "ami-007855ac798b5175e" # AMI
+  instance_type = "t2.micro" # tipo de instancia
   count         = 2 # Crear dos instancias
 
   subnet_id              = aws_subnet.practica.id
